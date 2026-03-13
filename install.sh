@@ -98,6 +98,16 @@ install_packages() {
   fi
 }
 
+install_npm_packages() {
+  if ! exists npm; then
+    warn "npm not found, skipping npm package install"
+    return
+  fi
+
+  log "Installing npm packages globally"
+  npm install -g neovim tree-sitter-cli
+}
+
 install_oh_my_zsh() {
   if [ -d "$HOME/.oh-my-zsh" ]; then
     log "Oh My Zsh already installed"
@@ -187,6 +197,7 @@ main() {
   install_homebrew
   ensure_brew_in_shell
   install_packages
+  install_npm_packages
   install_oh_my_zsh
   create_dirs
   symlink_configs
