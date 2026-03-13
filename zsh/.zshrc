@@ -5,19 +5,34 @@ plugins=(git)
 
 source "$ZSH/oh-my-zsh.sh"
 
-# Enable Vim Mode
+export EDITOR="nvim"
+export VISUAL="nvim"
+export GIT_EDITOR="nvim"
+
 bindkey -v
 bindkey -M viins 'jk' vi-cmd-mode
 
+export KEYTIMEOUT=10
+
 function zle-keymap-select {
-    if [[ ${KEYMAP} == vicmd ]]; then
-        echo -ne "\e[1 q"
-    else
-        echo -ne "\e[5 q"
-    fi
+  if [[ $KEYMAP == vicmd ]]; then
+    printf '\e[1 q'
+  else
+    printf '\e[5 q'
+  fi
+}
+
+function zle-line-init {
+  printf '\e[5 q'
+}
+
+function zle-line-finish {
+  printf '\e[5 q'
 }
 
 zle -N zle-keymap-select
+zle -N zle-line-init
+zle -N zle-line-finish
 
 [ -d "/opt/homebrew/opt/libpq/bin" ] && export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 [ -d "/home/linuxbrew/.linuxbrew/opt/libpq/bin" ] && export PATH="/home/linuxbrew/.linuxbrew/opt/libpq/bin:$PATH"

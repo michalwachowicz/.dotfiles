@@ -67,3 +67,5 @@ vim.opt.colorcolumn = "100"
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
+-- FIX CURSOR --
+vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50"
