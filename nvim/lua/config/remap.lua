@@ -1,4 +1,5 @@
 local telescope = require("telescope.builtin")
+local telescope_actions = require("telescope.actions")
 local harpoon_utils = require("utils/harpoon-utils")
 local harpoon = require("harpoon")
 
@@ -39,6 +40,16 @@ vim.keymap.set("n", "<leader>ps", function()
 	telescope.grep_string({ search = vim.fn.input("Grep > ") })
 end)
 
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "TelescopePrompt",
+	callback = function()
+		local opts = { buffer = true, silent = true }
+		vim.keymap.set({ "i", "n" }, "<C-c>", function()
+			telescope_actions.close(vim.api.nvim_get_current_buf())
+		end, opts)
+	end,
+})
+
 -- UndoTree --
 vim.g.undotree_SetFocusWhenToggle = 1
 vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
@@ -66,4 +77,3 @@ vim.keymap.set("n", "<C-h>", "<cmd>TmuxNavigateLeft<cr>");
 vim.keymap.set("n", "<C-l>", "<cmd>TmuxNavigateRight<cr>");
 vim.keymap.set("n", "<C-j>", "<cmd>TmuxNavigateDown<cr>");
 vim.keymap.set("n", "<C-k>", "<cmd>TmuxNavigateUp<cr>");
-
