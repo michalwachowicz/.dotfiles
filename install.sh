@@ -147,7 +147,17 @@ symlink_file() {
   local target="$2"
 
   mkdir -p "$(dirname "$target")"
-  ln -sfn "$source" "$target"
+
+  if [ -L "$target" ]; then
+    rm "$target"
+  elif [ -e "$target" ]; then
+    local backup
+    backup="${target}.backup.$(date +%Y%m%d%H%M%S)"
+    mv "$target" "$backup"
+    echo "moved existing: $target -> $backup"
+  fi
+
+  ln -s "$source" "$target"
   echo "linked: $target -> $source"
 }
 
