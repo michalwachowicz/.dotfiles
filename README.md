@@ -12,6 +12,7 @@ cd "$HOME/.dotfiles"
 
 - Make config changes in this repository (source of truth).
 - Re-run `./install.sh` when adding new managed files/symlinks or on a new machine.
+- Any `*.sh` file in `scripts/` is auto-symlinked to `$SCRIPTS_BIN_DIR/<name>` (defaults to `~/.local/bin`).
 
 ## Optional
 

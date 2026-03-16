@@ -41,3 +41,14 @@ export PATH="$HOME/.local/bin:$PATH"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+
+token() {
+  local export_line
+  export_line="$(command token --print-export 2>/dev/null)" || {
+    echo "token executable not found in PATH or failed" >&2
+    return 1
+  }
+
+  eval "$export_line"
+  echo "TOKEN loaded (length: ${#TOKEN})"
+}

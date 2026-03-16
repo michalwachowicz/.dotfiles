@@ -2,6 +2,7 @@
 set -euo pipefail
 
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.dotfiles}"
+SCRIPTS_BIN_DIR="${SCRIPTS_BIN_DIR:-$HOME/.local/bin}"
 
 log() {
   printf "\n==> %s\n" "$1"
@@ -140,6 +141,7 @@ install_tpm() {
 create_dirs() {
   log "Creating directories"
   mkdir -p "$HOME/.config"
+  mkdir -p "$SCRIPTS_BIN_DIR"
 }
 
 symlink_file() {
@@ -170,6 +172,32 @@ symlink_configs() {
   [ -f "$DOTFILES_DIR/.ideavimrc" ] && symlink_file "$DOTFILES_DIR/.ideavimrc" "$HOME/.ideavimrc"
   [ -d "$DOTFILES_DIR/nvim" ] && symlink_file "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
   [ -d "$DOTFILES_DIR/ghostty" ] && symlink_file "$DOTFILES_DIR/ghostty" "$HOME/.config/ghostty"
+}
+
+symlink_scripts() {
+  local scripts_dir="$DOTFILES_DIR/scripts"
+
+  if [ ! -d "$scripts_dir" ]; then
+    return
+  fi
+
+  log "Symlinking scripts"
+
+  local source target name
+  shopt -s nullglob
+  for source in "$scripts_dir"/*.sh; do
+    [ -f "$source" ] || continue
+    chmod +x "$source"
+    name="$(basename "$source" .sh)"
+    target="$SCRIPTS_BIN_DIR/$name"
+    symlink_file "$source" "$target"
+  done
+  shopt -u nullglob
+
+  case ":$PATH:" in
+    *":$SCRIPTS_BIN_DIR:"*) ;;
+    *) warn "$SCRIPTS_BIN_DIR is not in PATH; scripts may not run from anywhere" ;;
+  esac
 }
 
 set_default_shell() {
@@ -211,6 +239,7 @@ main() {
   install_oh_my_zsh
   create_dirs
   symlink_configs
+  symlink_scripts
   install_tpm
   set_default_shell
 
