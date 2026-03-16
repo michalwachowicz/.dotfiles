@@ -4,7 +4,7 @@ local harpoon_utils = require("utils/harpoon-utils")
 local harpoon = require("harpoon")
 
 -- Basic --
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+vim.keymap.set("n", "<leader>pv", "<cmd>Neotree toggle reveal<cr>")
 vim.keymap.set("i", "jk", "<Esc>", { noremap = true, silent = true })
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
