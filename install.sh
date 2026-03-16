@@ -109,6 +109,18 @@ install_npm_packages() {
   npm install -g neovim tree-sitter-cli
 }
 
+install_roslyn_language_server() {
+  local installer="$DOTFILES_DIR/scripts/install-roslyn-ls.sh"
+
+  if [ ! -f "$installer" ]; then
+    warn "Roslyn installer script not found, skipping"
+    return
+  fi
+
+  log "Installing Roslyn language server"
+  bash "$installer"
+}
+
 install_oh_my_zsh() {
   if [ -d "$HOME/.oh-my-zsh" ]; then
     log "Oh My Zsh already installed"
@@ -238,6 +250,7 @@ main() {
   install_npm_packages
   install_oh_my_zsh
   create_dirs
+  install_roslyn_language_server
   symlink_configs
   symlink_scripts
   install_tpm

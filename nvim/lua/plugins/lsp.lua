@@ -10,11 +10,14 @@ return {
       "mason-org/mason.nvim",
     },
     config = function()
-      -- Only put per-server customizations here.
-      -- Servers listed in mason-lspconfig ensure_installed
-      -- will be auto-enabled because automatic_enable = true.
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      local has_blink, blink = pcall(require, "blink.cmp")
+      if has_blink then
+        capabilities = blink.get_lsp_capabilities(capabilities)
+      end
 
       vim.lsp.config("lua_ls", {
+        capabilities = capabilities,
         settings = {
           Lua = {
             diagnostics = {
@@ -23,6 +26,30 @@ return {
           },
         },
       })
+
+      vim.lsp.config("roslyn_ls", {
+        capabilities = vim.tbl_deep_extend("force", capabilities, {
+          textDocument = {
+            diagnostic = {
+              dynamicRegistration = true,
+            },
+          },
+        }),
+        settings = {
+          ["csharp|background_analysis"] = {
+            dotnet_analyzer_diagnostics_scope = "openFiles",
+            dotnet_compiler_diagnostics_scope = "openFiles",
+          },
+          ["csharp|completion"] = {
+            dotnet_show_completion_items_from_unimported_namespaces = true,
+            dotnet_show_name_completion_suggestions = true,
+          },
+        },
+      })
+
+      if vim.fn.executable("roslyn-language-server") == 1 or vim.fn.executable("Microsoft.CodeAnalysis.LanguageServer") == 1 then
+        vim.lsp.enable("roslyn_ls")
+      end
     end,
   },
 
@@ -42,7 +69,6 @@ return {
         "jsonls",
         "eslint",
         "gopls",
-        "omnisharp",
 
         -- Extras
         "tailwindcss",
@@ -53,7 +79,6 @@ return {
         "taplo",
         "marksman",
       },
-      automatic_enable = true,
     },
   },
 
@@ -99,7 +124,7 @@ return {
     version = "*",
     dependencies = { "rafamadriz/friendly-snippets" },
     opts = {
-      keymap = { preset = "default" },
+      keymap = { preset = "enter" },
       appearance = {
         nerd_font_variant = "mono",
       },
