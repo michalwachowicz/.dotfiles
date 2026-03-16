@@ -21,13 +21,36 @@ vim.keymap.set("x", "<leader>p", "\"_dP")
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 
 -- LSP --
-vim.keymap.set("n", "gd", vim.lsp.buf.definition)
+local function has_omnisharp_attached()
+	for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
+		if client.name == "omnisharp" or client.name == "omnisharp_mono" then
+			return true
+		end
+	end
+
+	return false
+end
+
+vim.keymap.set("n", "gd", function()
+	if has_omnisharp_attached() then
+		local ok, omnisharp_extended = pcall(require, "omnisharp_extended")
+		if ok then
+			omnisharp_extended.telescope_lsp_definition({ jump_type = "never" })
+			return
+		end
+	end
+
+	telescope.lsp_definitions()
+end)
 vim.keymap.set("n", "gD", vim.lsp.buf.declaration)
 vim.keymap.set("n", "gi", vim.lsp.buf.implementation)
 vim.keymap.set("n", "gr", vim.lsp.buf.references)
 vim.keymap.set("n", "K", vim.lsp.buf.hover)
 vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename)
 vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action)
+vim.keymap.set("n", "<leader>f", function()
+	require("conform").format({ async = true, lsp_format = "fallback" })
+end)
 
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
