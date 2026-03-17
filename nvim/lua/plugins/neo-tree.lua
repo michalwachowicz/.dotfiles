@@ -84,6 +84,19 @@ return {
         indent = {
           with_expanders = true,
         },
+        git_status = {
+          symbols = {
+            added = "",
+            deleted = "",
+            modified = "",
+            renamed = "➜",
+            untracked = "★",
+            ignored = "◌",
+            unstaged = "!",
+            staged = "✓",
+            conflict = "✗",
+          },
+        },
         name = {
           highlight_opened_files = false,
         },
