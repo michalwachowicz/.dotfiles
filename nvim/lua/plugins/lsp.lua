@@ -27,29 +27,6 @@ return {
         },
       })
 
-      vim.lsp.config("roslyn_ls", {
-        capabilities = vim.tbl_deep_extend("force", capabilities, {
-          textDocument = {
-            diagnostic = {
-              dynamicRegistration = true,
-            },
-          },
-        }),
-        settings = {
-          ["csharp|background_analysis"] = {
-            dotnet_analyzer_diagnostics_scope = "openFiles",
-            dotnet_compiler_diagnostics_scope = "openFiles",
-          },
-          ["csharp|completion"] = {
-            dotnet_show_completion_items_from_unimported_namespaces = true,
-            dotnet_show_name_completion_suggestions = true,
-          },
-        },
-      })
-
-      if vim.fn.executable("roslyn-language-server") == 1 or vim.fn.executable("Microsoft.CodeAnalysis.LanguageServer") == 1 then
-        vim.lsp.enable("roslyn_ls")
-      end
     end,
   },
 
