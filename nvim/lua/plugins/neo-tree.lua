@@ -31,6 +31,10 @@ return {
     end,
     opts = {
       filesystem = {
+        filtered_items = {
+          hide_dotfiles = false,
+          hide_gitignored = false,
+        },
         components = {
           name = function(config, node, state)
             local name_component = require("neo-tree.sources.common.components").name
