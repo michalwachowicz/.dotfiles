@@ -79,9 +79,6 @@ return {
         "goimports",
         "golangci-lint",
 
-        -- C#
-        "csharpier",
-
         -- Shell
         "shellcheck",
         "shfmt",
