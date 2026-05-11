@@ -14,6 +14,8 @@ return {
       scss = { "prettier" },
       yaml = { "prettier" },
       markdown = { "prettier" },
+      terraform = { "terraform_fmt" },
+      tf = { "terraform_fmt" },
     },
   },
 }

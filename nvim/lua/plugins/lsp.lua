@@ -55,6 +55,7 @@ return {
         "docker_compose_language_service",
         "taplo",
         "marksman",
+        "terraformls",
       },
     },
   },
@@ -90,6 +91,9 @@ return {
         "hadolint",
         "taplo",
         "markdownlint",
+
+        -- Terraform
+        "terraform-ls",
       },
       run_on_start = true,
       debounce_hours = 12,
