@@ -1,5 +1,6 @@
 brew "git"
 brew "go"
+brew "golangci-lint"
 brew "libpq"
 brew "luarocks"
 brew "neovim"
