@@ -3,6 +3,43 @@ local telescope_actions = require("telescope.actions")
 local harpoon_utils = require("utils/harpoon-utils")
 local harpoon = require("harpoon")
 
+local function toggle_comment_range(start_line, end_line)
+	local cs = vim.bo.commentstring
+	if cs == nil or cs == "" or not cs:find("%%s") then
+		return
+	end
+
+	local left, right = cs:match("^(.*)%%s(.*)$")
+	left = vim.trim(left or "")
+	right = vim.trim(right or "")
+
+	for lnum = start_line, end_line do
+		local line = vim.api.nvim_buf_get_lines(0, lnum - 1, lnum, false)[1] or ""
+		local indent, content = line:match("^(%s*)(.*)$")
+
+		if content ~= "" then
+			if right == "" then
+				if vim.startswith(content, left) then
+					content = vim.trim(content:sub(#left + 1))
+				else
+					content = left .. " " .. content
+				end
+			else
+				local escaped_left = vim.pesc(left)
+				local escaped_right = vim.pesc(right)
+				local uncommented = content:match("^" .. escaped_left .. "%s*(.-)%s*" .. escaped_right .. "$")
+				if uncommented then
+					content = uncommented
+				else
+					content = left .. " " .. content .. " " .. right
+				end
+			end
+
+			vim.api.nvim_buf_set_lines(0, lnum - 1, lnum, false, { indent .. content })
+		end
+	end
+end
+
 -- Basic --
 vim.keymap.set("n", "<leader>pv", "<cmd>Neotree toggle reveal<cr>")
 vim.keymap.set("i", "jk", "<Esc>", { noremap = true, silent = true })
@@ -19,6 +56,17 @@ vim.keymap.set("n", "N", "Nzzzv")
 
 vim.keymap.set("x", "<leader>p", "\"_dP")
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+vim.keymap.set("n", "<leader>/", function()
+	toggle_comment_range(vim.fn.line("."), vim.fn.line("."))
+end, { desc = "Toggle comment" })
+vim.keymap.set("x", "<leader>/", function()
+	local start_line = vim.fn.line("v")
+	local end_line = vim.fn.line(".")
+	if start_line > end_line then
+		start_line, end_line = end_line, start_line
+	end
+	toggle_comment_range(start_line, end_line)
+end, { desc = "Toggle comment" })
 
 -- LSP --
 vim.keymap.set("n", "gd", telescope.lsp_definitions)
