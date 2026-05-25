@@ -36,6 +36,7 @@ zle -N zle-line-finish
 
 [ -d "/opt/homebrew/opt/libpq/bin" ] && export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 [ -d "/home/linuxbrew/.linuxbrew/opt/libpq/bin" ] && export PATH="/home/linuxbrew/.linuxbrew/opt/libpq/bin:$PATH"
+export PATH="$PATH:$(go env GOPATH)/bin"
 export PATH="$HOME/.local/bin:$PATH"
 
 export NVM_DIR="$HOME/.nvm"
