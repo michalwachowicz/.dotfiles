@@ -167,7 +167,7 @@ symlink_configs() {
   log "Symlinking configs"
 
   [ -f "$DOTFILES_DIR/zsh/.zshrc" ] && symlink_file "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
-  [ -f "$DOTFILES_DIR/tmux/tmux.conf" ] && symlink_file "$DOTFILES_DIR/tmux/tmux.conf" "$HOME/.config/tmux/tmux.conf"
+  [ -f "$DOTFILES_DIR/tmux/tmux.conf" ] && symlink_file "$DOTFILES_DIR/tmux/tmux.conf" "$HOME/.tmux.conf"
   [ -f "$DOTFILES_DIR/.gitconfig" ] && symlink_file "$DOTFILES_DIR/.gitconfig" "$HOME/.gitconfig"
   [ -f "$DOTFILES_DIR/.ideavimrc" ] && symlink_file "$DOTFILES_DIR/.ideavimrc" "$HOME/.ideavimrc"
   [ -d "$DOTFILES_DIR/nvim" ] && symlink_file "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
